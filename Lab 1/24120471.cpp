@@ -1,4 +1,4 @@
-﻿#include <cmath>
+#include <cmath>
 #include <iostream>
 #include <vector>
 #include <string>
@@ -312,7 +312,7 @@ int precedence(char op) {
 // Hàm kiểm tra xem ký tự có phải là toán tử không
 // Trả về true nếu là toán tử, false nếu không phải
 bool isOperator(char c) {
-    return (c == '+' || c == '-' || c == '*' || c == ':');
+    return (c == '+' || c == '-' || c == '*' || c == '/');
 }
 // Hàm chuyển đổi biểu thức infix sang postfix
 // Sử dụng thuật toán Shunting Yard của Edsger Dijkstra
@@ -492,36 +492,14 @@ vector<char> EvaluatePostfix(const vector<char>& postfix) {
 }
 
 int main(int argc, char* argv[]) {
-    string inputFileName, outputFileName;
-
-    // Xử lý tham số dòng lệnh
-    for (int i = 1; i < argc; i++) {
-        string arg = argv[i];
-        if (arg == "-i") {
-            if (i + 1 < argc) inputFileName = argv[++i];
-            else {
-                cerr << "Missing input file name after -i" << endl;
-                return 1;
-            }
-        }
-        else if (arg == "-o") {
-            if (i + 1 < argc) outputFileName = argv[++i];
-            else {
-                cerr << "Missing output file name after -o" << endl;
-                return 1;
-            }
-        }
-        else {
-            cerr << "Invalid parameter: " << arg << endl;
-            return 1;
-        }
-    }
-
-    // Kiểm tra đã nhập đủ tên file chưa
-    if (inputFileName.empty() || outputFileName.empty()) {
-        cerr << "Syntax: " << argv[0] << " -i <file input> -o <file output>" << endl;
+    // Kiểm tra số lượng tham số đầu vào
+    if (argc != 3) {
+        cerr << "Syntax: " << argv[0] << " <file input> <file output>" << endl;
         return 1;
     }
+
+    string inputFileName = argv[1];
+    string outputFileName = argv[2];
 
     ifstream inputFile(inputFileName);
     if (!inputFile.is_open()) {
@@ -549,8 +527,7 @@ int main(int argc, char* argv[]) {
             
             // Ghi sang file output
             for (char c : result) outputFile << c;
-            outputFile << '\n'; // giữ dòng
-            
+            outputFile << '\n';
             // Xóa data để chuẩn bị cho dòng tiếp theo
             data.clear();
             postfix.clear();
